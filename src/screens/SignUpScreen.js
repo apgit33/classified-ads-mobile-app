@@ -10,7 +10,6 @@ export const SignUpScreen = ({ navigation }) => {
     const [confirmpassword, setConfirmpassword] = React.useState('');
     const { signIn } = React.useContext(AuthContext);
 
-// console.log(LogoURI);
     return (
         <View>
             <View style={styles.logoContainer}>
@@ -47,56 +46,25 @@ export const SignUpScreen = ({ navigation }) => {
                 <Button 
                     title="S'inscrire" 
                     onPress={() =>
-                        // SignUp({ email, name, password, confirmpassword })
-                        // post('/api/users', {
-                        //     name: name,
-                        //     email: email,
-                        //     password: password,
-                        //     password_confirmation: confirmpassword,
-                        // })
-                            // .then(() => {
+                        post('/api/users', {
+                            name: name,
+                            email: email,
+                            password: password,
+                            password_confirmation: confirmpassword,
+                        })
+                            .then(() => {
                                 signIn({ email, password })
-                            // })
+                            })
                     }
                 />
 
                 <TouchableOpacity onPress={() => navigation.navigate('SignIn')} >
                     <Text>Déjà un compte ? <Text style={styles.link}>connecte toi</Text></Text>
                 </TouchableOpacity>
-
             </View>
         </View>
     );
 }
-
-// export const SignUp = (data) => {
-//     const { signIn } = React.useContext(AuthContext);
-
-//     // console.log({
-//     //     password_confirmation: data.confirmpassword,
-//     //     name: data.nickname,
-//     //     email: data.email,
-//     //     password: data.password,
-//     // });
-//     // post('/users', {
-//     //     name: data.name,
-//     //     email: data.email,
-//     //     password: data.password,
-//     //     password_confirmation: data.confirmpassword,
-//     // })
-//     //     .then(() => {
-//     //         signIn({ email, password })
-//     //     })
-
-//     // signIn({ email, password })
-//         // .then(data => {
-//         //     signIn({ email, password })
-//         // })    
-//         // .catch((error) => {
-//         //     console.error(error);
-//         // });
-
-// }
 
 const styles = StyleSheet.create({
     logoContainer: {
