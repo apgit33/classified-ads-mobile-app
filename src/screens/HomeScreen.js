@@ -1,77 +1,69 @@
-import React from 'react';
-import { View, Text, Button } from 'react-native';
-import { getUsers } from '../api/mock';
-import { setToken } from '../api/token';
+import * as React from 'react';
+// import React, { useState } from 'react';
 
-export default class HomeScreen extends React.Component {
-    state = { users: [], hasLoadedUsers: false, userLoadingErrorMessage: '' };
-  
-    loadUsers() {
-        this.setState({ hasLoadedUsers: false, userLoadingErrorMessage: '' });
-        getUsers()
-            .then((res) =>
-            this.setState({
-                hasLoadedUsers: true,
-                users: res.users,
-            }),
-            )
-            .catch(this.handleUserLoadingError);
-    }
-  
-    handleUserLoadingError = (res) => {
-        if (res.error === 401) {
-            this.props.navigation.navigate('Login');
-        } else {
-            this.setState({
-                hasLoadedUsers: false,
-                userLoadingErrorMessage: res.message,
-            });
+import { StyleSheet, View, TextInput, Text, FlatList, Button,TouchableOpacity } from 'react-native'
+import { AuthContext } from '../config/config';
+import * as SecureStore from 'expo-secure-store';
+import { getInterventions } from '../api/user';
+import FilmItem from './FilmItem'
+
+// import { getUsers } from '../api/users';
+// import { getUser } from '../api/user';
+// import { getAds } from '../api/ads';
+// import { setToken, getToken } from '../api/token';
+// import { Search } from '../../Components/Search';
+// import FilmItem from '../../Components/FilmItem'
+// import { getFilmsFromApiWithSearchedText, getAdsFromApi } from '../../API/TMDBApi' // import { } from ... car c'est un export nommé dans TMDBApi.js
+
+export const getToken = async () => {
+    try {
+        const value = await SecureStore.getItemAsync('userToken');
+
+        if (value !== null) {
+            return value;
         }
+    } catch (e) {
+        return null;
     }
-  
-    componentDidMount() {
-        this.didFocusSubscription = this.props.navigation.addListener(
-            'didFocus',
-            () => {
-                if (!this.state.hasLoadedUsers) {
-                    this.loadUsers();
-                }
-            },
-        );
-    }
-    
-    componentWillUnmount() {
-        this.didFocusSubscription.remove();
-    }
+};
 
-    logOut = async () => {
-        this.setState({ hasLoadedUsers: false, users: [] })
-        await setToken('');
-        this.props.navigation.navigate('Login');
-    };
 
-    render() {
-        const { users, userLoadingErrorMessage } = this.state;
 
-        return (
-            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+export const HomeScreen = ({ navigation }) => {
+    const { signOut } = React.useContext(AuthContext);
 
-                <Text>HomeScreen</Text>
+    const [interventions, setInterventions] = React.useState('');
 
-                {users.map((user) => (
-                    <Text key={user.email}>{user.email}</Text>
-                ))}
-
-                {userLoadingErrorMessage ? (
-                    <Text>{userLoadingErrorMessage}</Text>
-                ) : null}
-
-                <Button title="Log out" onPress={this.logOut} />
-                        {/* {this.state.users.map((user) => (
-                    <Text key={user.email}>{user.email}</Text>
-                ))}
-                <Button title="Log out" onPress={() => this.props.navigation.navigate('Login')} /> */}
+    React.useEffect(() => {
+        const fetchData = async () => {
+          const result = await getInterventions();
+     
+          setInterventions(result.data);
+        };
+     
+        fetchData();
+    }, []);
+// console.log(interventions);
+    return (
+        <View>
+            
+            <View >
+                <Text>Interventions prévues</Text>
             </View>
-        );
-    }
-  }
+
+            <View >
+                <FlatList
+                    data={interventions}
+                    keyExtractor={(item) => item.intervention.id.toString()}
+                    // renderItem={({item}) => <FilmItem film={item} navigation={this.props.navigation}/>}
+                    renderItem={({item}) => 
+                        <TouchableOpacity onPress={() => navigation.navigate('Test', {intervention: item} )} >
+                            <Text>{item.intervention.name}</Text>
+                            <Text>{item.intervention.intervention_at}</Text>
+                        </TouchableOpacity>
+                    }
+                />
+            </View>
+        </View>
+    );
+};
