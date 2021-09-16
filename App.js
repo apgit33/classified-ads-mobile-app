@@ -104,10 +104,10 @@ export default function App({ navigation }) {
         () => ({
             signIn: async (data) => {
                 const token = await post('/oauth/token', {
-                    username: data.email,
-                    password: data.password,
-                    // username: 'admin@admin.fr',
-                    // password: 'admin',
+                    // username: data.email,
+                    // password: data.password,
+                    username: 'test@test.fr',
+                    password: 'ddd',
                     grant_type: 'password',
                     client_id: CLIENT_ID,
                     client_secret: CLIENT_SECRET,
@@ -148,41 +148,41 @@ export default function App({ navigation }) {
                         <Stack.Screen name="Splash" component={SplashScreen} />
                     ) : state.userToken == null ? (
                         // No token found, user isn't signed in
-                        <Stack.Screen
-                            name="SignIn"
-                            component={SignInScreen}
-                            options={{
-                                // title: 'Sign in',
-                                // When logging out, a pop animation feels intuitive
-                                // headerTitle: (props) => <LogoutButton {...props} />,
-                                // animationTypeForReplace: state.isSignout ? 'pop' : 'push',
-                                // title: 'My home',
-                                // headerStyle: {
-                                //     backgroundColor: '#f4511e',
-                                // },
-                                // // headerTintColor: '#fff',
-                                // headerTitleStyle: {
-                                //     fontWeight: 'bold',
-                                // },
-                                headerShown: false,
-                            }}
-                        />
+                        <>
+                            <Stack.Screen
+                                name="SignIn"
+                                component={SignInScreen}
+                                options={{
+                                    // title: 'Sign in',
+                                    // When logging out, a pop animation feels intuitive
+                                    // headerTitle: (props) => <LogoutButton {...props} />,
+                                    // animationTypeForReplace: state.isSignout ? 'pop' : 'push',
+                                    // title: 'My home',
+                                    // headerStyle: {
+                                    //     backgroundColor: '#f4511e',
+                                    // },
+                                    // // headerTintColor: '#fff',
+                                    // headerTitleStyle: {
+                                    //     fontWeight: 'bold',
+                                    // },
+                                    headerShown: false,
+                                }}
+                            />
+                            <Stack.Screen 
+                                name="SignUp" 
+                                component={SignUpScreen}
+                                options={{ headerShown: false }}
+                            />
+                            <Stack.Screen 
+                                name="Forgot" 
+                                component={ForgotScreen} 
+                                options={{ headerShown: false }}
+                            />
+                        </>
                     ) : (
                         // User is signed in
                         <Stack.Screen name="Home" component={HomeScreen}/>
                     )}
-
-                    <Stack.Screen 
-                        name="Forgot" 
-                        component={ForgotScreen} 
-                        options={{ headerShown: false }}
-                    />
-                    <Stack.Screen 
-                        name="SignUp" 
-                        component={SignUpScreen}
-                        options={{ headerShown: false }}
-                    />
-
                 </Stack.Navigator>
             </NavigationContainer>
         </AuthContext.Provider>
