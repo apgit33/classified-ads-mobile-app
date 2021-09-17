@@ -5,6 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { AuthContext } from './src/config/config';
 import {SignInScreen} from './src/screens/SignInScreen';
 import {HomeScreen} from './src/screens/HomeScreen';
+import {AdScreen} from './src/screens/AdScreen';
 import {SignUpScreen} from './src/screens/SignUpScreen';
 import {ForgotScreen} from './src/screens/ForgotScreen';
 import { post, get } from './src/api/fetch';
@@ -181,7 +182,10 @@ export default function App({ navigation }) {
                         </>
                     ) : (
                         // User is signed in
-                        <Stack.Screen name="Home" component={HomeScreen}/>
+                        <>
+                            <Stack.Screen name="Home" component={HomeScreen}/>
+                            <Stack.Screen name="Ad" component={AdScreen}/>
+                        </>
                     )}
                 </Stack.Navigator>
             </NavigationContainer>

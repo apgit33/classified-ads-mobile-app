@@ -4,9 +4,9 @@ import * as React from 'react';
 import { StyleSheet, View, TextInput, Text, FlatList, Button,TouchableOpacity } from 'react-native'
 import { AuthContext } from '../config/config';
 import * as SecureStore from 'expo-secure-store';
-import { getInterventions } from '../api/user';
-import FilmItem from './FilmItem'
-
+import { getAds } from '../api/route';
+// import FilmItem from '../components/FilmItem'
+import {CardItem} from '../components/CardItem'
 // import { getUsers } from '../api/users';
 // import { getUser } from '../api/user';
 // import { getAds } from '../api/ads';
@@ -14,6 +14,7 @@ import FilmItem from './FilmItem'
 // import { Search } from '../../Components/Search';
 // import FilmItem from '../../Components/FilmItem'
 // import { getFilmsFromApiWithSearchedText, getAdsFromApi } from '../../API/TMDBApi' // import { } from ... car c'est un export nommé dans TMDBApi.js
+// import { Card, ListItem, Button, Icon } from 'react-native-elements'
 
 export const getToken = async () => {
     try {
@@ -32,34 +33,40 @@ export const getToken = async () => {
 export const HomeScreen = ({ navigation }) => {
     const { signOut } = React.useContext(AuthContext);
 
-    const [interventions, setInterventions] = React.useState('');
+    const [ads, setAds] = React.useState('');
+    const [search, setSearch] = React.useState('');
 
     React.useEffect(() => {
         const fetchData = async () => {
-          const result = await getInterventions();
-     
-          setInterventions(result.data);
+            const result = await getAds();
+        
+            setAds(result.ads);
         };
      
         fetchData();
     }, []);
-// console.log(interventions);
+// console.log(ads);
     return (
         <View>
             
             <View >
-                <Text>Interventions prévues</Text>
+                <TextInput
+                    style={styles.input}
+                    placeholder="Rechercher une annonce"
+                    value={search}
+                    onChangeText={setSearch}
+                    onSubmitEditing={() => test()}
+                />
             </View>
 
             <View >
                 <FlatList
-                    data={interventions}
-                    keyExtractor={(item) => item.intervention.id.toString()}
+                    data={ads}
+                    keyExtractor={(item) => item.id.toString()}
                     // renderItem={({item}) => <FilmItem film={item} navigation={this.props.navigation}/>}
                     renderItem={({item}) => 
-                        <TouchableOpacity onPress={() => navigation.navigate('Test', {intervention: item} )} >
-                            <Text>{item.intervention.name}</Text>
-                            <Text>{item.intervention.intervention_at}</Text>
+                        <TouchableOpacity onPress={() => navigation.navigate('Ad', {ad: item} )} >
+                            <CardItem ad={item}/>
                         </TouchableOpacity>
                     }
                 />
@@ -67,3 +74,17 @@ export const HomeScreen = ({ navigation }) => {
         </View>
     );
 };
+
+const styles = StyleSheet.create({
+    input: {
+        height: 40,
+        margin: 12,
+        borderWidth: 1,
+        padding: 10,
+    },
+});
+
+function test() {
+    console.log('call /search puis setAds');
+    // setAds()
+}
