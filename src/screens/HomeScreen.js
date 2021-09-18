@@ -1,12 +1,13 @@
 import * as React from 'react';
 // import React, { useState } from 'react';
 
-import { StyleSheet, View, TextInput, Text, FlatList, Button,TouchableOpacity } from 'react-native'
+import { StyleSheet, View, TextInput, Text, FlatList, Button, TouchableOpacity } from 'react-native'
 import { AuthContext } from '../config/config';
 import * as SecureStore from 'expo-secure-store';
 import { getAds } from '../api/route';
 // import FilmItem from '../components/FilmItem'
-import {CardItem} from '../components/CardItem'
+import { CardItem } from '../components/CardItem'
+import DelayInput from 'react-native-debounce-input';
 // import { getUsers } from '../api/users';
 // import { getUser } from '../api/user';
 // import { getAds } from '../api/ads';
@@ -38,24 +39,29 @@ export const HomeScreen = ({ navigation }) => {
 
     React.useEffect(() => {
         const fetchData = async () => {
-            const result = await getAds();
-        
+            const result = await getAds(search);
+
             setAds(result.ads);
         };
-     
+
         fetchData();
-    }, []);
-// console.log(ads);
+    }, [search]);
+    const inputRef = React.createRef();
+    
+    // console.log(ads);
     return (
         <View>
-            
+
             <View >
-                <TextInput
-                    style={styles.input}
+                <DelayInput
                     placeholder="Rechercher une annonce"
                     value={search}
+                    minLength={3}
+                    inputRef={inputRef}
                     onChangeText={setSearch}
-                    onSubmitEditing={() => test()}
+                    delayTimeout={1000}
+                    style={styles.input}
+
                 />
             </View>
 
@@ -64,9 +70,9 @@ export const HomeScreen = ({ navigation }) => {
                     data={ads}
                     keyExtractor={(item) => item.id.toString()}
                     // renderItem={({item}) => <FilmItem film={item} navigation={this.props.navigation}/>}
-                    renderItem={({item}) => 
-                        <TouchableOpacity onPress={() => navigation.navigate('Ad', {ad: item} )} >
-                            <CardItem ad={item}/>
+                    renderItem={({ item }) =>
+                        <TouchableOpacity onPress={() => navigation.navigate('Ad', { ad: item })} >
+                            <CardItem ad={item} />
                         </TouchableOpacity>
                     }
                 />

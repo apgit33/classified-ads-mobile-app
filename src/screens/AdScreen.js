@@ -1,13 +1,13 @@
 import * as React from 'react';
 // import React, { useState } from 'react';
 
-import { StyleSheet, View, TextInput, Text, FlatList, Button,TouchableOpacity } from 'react-native'
+import { StyleSheet, View, TextInput, Text, FlatList, Button,TouchableOpacity } from 'react-native';
 import { AuthContext } from '../config/config';
 import * as SecureStore from 'expo-secure-store';
 import { getAds } from '../api/route';
-// import FilmItem from '../components/FilmItem'
-import {CardItem} from '../components/CardItem'
 import { Ad } from '../components/Ad';
+// import FilmItem from '../components/FilmItem'
+// import {CardItem} from '../components/CardItem'
 // import { getUsers } from '../api/users';
 // import { getUser } from '../api/user';
 // import { getAds } from '../api/ads';
