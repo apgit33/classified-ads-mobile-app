@@ -11,5 +11,16 @@ import { get, post } from './fetch';
 // };
 
 export const getAds = (search) => {
-    return get('/api/ads?search='+search);
+    if (search) {
+        return get('/api/ads?search='+search);
+    }
+    return get('/api/ads');
+};
+
+export const postAd = (data) => {
+    return post('/api/ads', data);
+}
+
+export const getCategories = () => {
+    return get('/api/ads/categories');
 };

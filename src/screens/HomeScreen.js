@@ -52,7 +52,7 @@ export const HomeScreen = ({ navigation }) => {
     return (
         <View>
 
-            <View >
+            {/* <View >
                 <DelayInput
                     placeholder="Rechercher une annonce"
                     value={search}
@@ -63,7 +63,7 @@ export const HomeScreen = ({ navigation }) => {
                     style={styles.input}
 
                 />
-            </View>
+            </View> */}
 
             <View >
                 <FlatList
@@ -89,8 +89,3 @@ const styles = StyleSheet.create({
         padding: 10,
     },
 });
-
-function test() {
-    console.log('call /search puis setAds');
-    // setAds()
-}

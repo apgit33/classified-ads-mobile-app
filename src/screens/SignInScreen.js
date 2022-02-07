@@ -1,15 +1,24 @@
 import React, { useState } from 'react';
 import { View, Text, Button, TextInput, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { AuthContext, LogoURI} from '../config/config';
+// import { Form, TextInput } from 'react-native-autofocus';
 
 export const SignInScreen = ({ navigation }) => {
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
-
+    const ref_input2 = React.useRef();
+    const ref_input3 = React.useRef();
     const { signIn } = React.useContext(AuthContext);
 // console.log(LogoURI);
+
+const onFocusHandler = () => {
+    ref_input3.current && ref_input3.current.focus();
+   }
+   React.useEffect(() => {
+       onFocusHandler();
+   }, []);
     return (
-        <View>
+        <>
             <View style={styles.logoContainer}>
                 <Image
                     style={styles.logo}
@@ -19,17 +28,25 @@ export const SignInScreen = ({ navigation }) => {
                 />
             </View>
             <View style={styles.formContainer}>
-                <TextInput
-                    placeholder="Email"
-                    value={email}
-                    onChangeText={setEmail}
-                />
-                <TextInput
-                    placeholder="Password"
-                    value={password}
-                    onChangeText={setPassword}
-                    secureTextEntry
-                />
+                {/* <Form> */}
+                    <TextInput
+                        autoFocus={true}
+                        placeholder="Email"
+                        value={email}
+                        onChangeText={setEmail}
+                        returnKeyType="next"
+                        onSubmitEditing={() => ref_input2.current.focus()}
+                        // ref={ref_input3}
+                    />
+                    <TextInput
+                        placeholder="Password"
+                        value={password}
+                        onChangeText={setPassword}
+                        secureTextEntry
+                        onSubmitEditing={() => signIn({ email, password })}
+                        // ref={ref_input2}
+                    />
+                {/* </Form> */}
                 <Button title="Sign in" onPress={() => signIn({ email, password })} />
 
                 <TouchableOpacity onPress={() => navigation.navigate('Forgot')} >
@@ -41,7 +58,7 @@ export const SignInScreen = ({ navigation }) => {
                 </TouchableOpacity>
 
             </View>
-        </View>
+        </>
     );
 }
 
